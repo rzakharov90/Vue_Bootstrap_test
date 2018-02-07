@@ -3,7 +3,7 @@
     
   <div class="hello">
     <b-container class="cmn-gap">
-        <b-navbar toggleable="md" type="dark" variant="info">
+        <b-navbar toggleable="md" type="dark" variant="info" sticky=true>
             <b-navbar-brand href="#">Лого</b-navbar-brand>
             <b-collapse is-nav id="nav_collapse">
                 <b-navbar-nav class="ml-auto">
@@ -34,6 +34,42 @@
             <b-col cols="12" sm="4" align-self="end" class="col">Третий</b-col>
         </b-row>
     </b-container>
+      
+<b-container>
+    <b-form-row no-gutters>
+        <b-col cols="3">
+            <b-form-select v-model="category" class="mb-3">
+              <option :value="null">Please select an option</option>
+              <option value="a">Option A</option>
+              <option value="b" disabled>Option B (disabled)</option>
+              <optgroup label="Grouped Options">
+                <option :value="{'C':'3PO'}">Option with object value</option>
+                <option :value="{'R':'2D2'}">Another option with object value</option>
+              </optgroup>
+            </b-form-select>
+        
+        </b-col>
+        <b-col cols="3">
+            
+        </b-col>
+        <b-col cols="3">
+            <b-form-select v-model="city" class="mb-3">
+              <option :value="null">Please select an option</option>
+              <option value="a">Option A</option>
+              <option value="b" disabled>Option B (disabled)</option>
+              <optgroup label="Grouped Options">
+                <option :value="{'C':'3PO'}">Option with object value</option>
+                <option :value="{'R':'2D2'}">Another option with object value</option>
+              </optgroup>
+            </b-form-select>
+        
+        </b-col>
+    
+    
+    </b-form-row>
+      
+      
+  </b-container>  
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
@@ -99,7 +135,9 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+        category: null,
+        city: null,
     }
   },
   components: {
