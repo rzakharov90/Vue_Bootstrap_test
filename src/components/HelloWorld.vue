@@ -2,11 +2,36 @@
     
     
   <div class="hello">
-    <b-container>
-        <b-row>
-            <b-col cols="4">Первый</b-col>
-            <b-col cols="2">Второй</b-col>
-            <b-col cols="2">Третий</b-col>
+    <b-container class="cmn-gap">
+        <b-navbar toggleable="md" type="dark" variant="info">
+            <b-navbar-brand href="#">Лого</b-navbar-brand>
+            <b-collapse is-nav id="nav_collapse">
+                <b-navbar-nav class="ml-auto">
+                    <b-nav-item active>Пиломатериалы</b-nav-item>
+                    <b-nav-item>Цемент</b-nav-item>
+                    <b-nav-item>Плитка</b-nav-item>
+                </b-navbar-nav>
+            </b-collapse>
+        </b-navbar>
+    </b-container>
+    <b-container class="cmn-gap">
+        <b-row align-v="center" align-h="between">
+            <b-col cols="12" sm="3" class="col">Логотип</b-col>
+            <b-col class="col" cols="12" sm="7">
+                 <b-nav fill >
+                    <b-nav-item active>Пиломатериалы</b-nav-item>
+                    <b-nav-item>Цемент</b-nav-item>
+                    <b-nav-item>Плитка</b-nav-item>
+                    <b-nav-item disabled>Песок</b-nav-item>
+                  </b-nav>
+            </b-col>
+        </b-row>
+    </b-container>
+    <b-container class="cmn-gap">
+        <b-row align-v="start" align-h="between">
+            <b-col cols="12" sm="4" class="col">Первый</b-col>
+            <b-col cols="12" sm="3" class="col">Второй</b-col>
+            <b-col cols="12" sm="4" align-self="end" class="col">Третий</b-col>
         </b-row>
     </b-container>
     <h1>{{ msg }}</h1>
@@ -27,6 +52,44 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
   </div>
 </template>
 
@@ -47,6 +110,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .cmn-gap {
+        margin-bottom: 40px;
+    }
+    .col {
+        border: 4px solid red;
+        padding: 15px;
+    }
 h1, h2 {
   font-weight: normal;
 }
