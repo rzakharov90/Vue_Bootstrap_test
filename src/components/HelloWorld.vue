@@ -1,7 +1,8 @@
 <template>
-    
-    
-  <div class="hello">
+    <div class="container">
+        <Search></Search>
+    </div>
+<!--  <div class="hello">
     <b-container class="cmn-gap">
         <b-navbar toggleable="md" type="dark" variant="info" sticky=true>
             <b-navbar-brand href="#">Лого</b-navbar-brand>
@@ -126,11 +127,12 @@
       <br>
       <br>
       <br>
-  </div>
+  </div>-->
 </template>
 
 <script>
 import Form from '@/components/Form/Form.vue'
+import Search from '@/components/Form/Search.vue'
 export default {
   name: 'HelloWorld',
   data () {
@@ -141,7 +143,7 @@ export default {
     }
   },
   components: {
-    Form
+    Form, Search
   }
 }
 </script>
