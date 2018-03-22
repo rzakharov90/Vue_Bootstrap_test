@@ -132,7 +132,7 @@
 
 <script>
 import Form from '@/components/Form/Form.vue'
-import Search from '@/components/Form/Search.vue'
+import Search from '@/components/Form/Search'
 export default {
   name: 'HelloWorld',
   data () {
