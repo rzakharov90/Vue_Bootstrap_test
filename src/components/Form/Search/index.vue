@@ -178,20 +178,12 @@
                 for (let name in data){
                     let d = data[name];
                     
-                    finData[name] = {};
-                    finData[name].name = d.name;
-                    finData[name].parent = d.parent;
-                    finData[name].placeholder = d.placeholder;
-                    finData[name].type = d.type;
-                    
+                    finData[name] = {...d};
                     if (d.parent) {
                         let parent = d.parent;
                         let parentValue = this[parent];
                         finData[name].data = d.data[parentValue];
-                    } else {
-                        finData[name].data =  d.data;
-                    }
-                    
+                    } 
                 }
                 return finData;
                 
