@@ -1,32 +1,40 @@
 <template>
-        <select name="data.name" class="main-search__select"  v-bind="data.name">
-            <option class="main-search__option" v-for="option in data.data" :value="option.value">{{option.name}}</option>
-        </select>
+    <component v-bind:is="type" :data="data" v-on:updateValue="updateValue"></component>
 </template>
 
 <script>
-export default {
-  name: 'formElement',
-  props: {
-    data: {
-      default: {}
-    }
-  },
-  data () {
-    return {
-      
-    }
-  },
-    computed: {
-        
-    },
-  methods: {
+    import SelectVue from './Elements/SelectVue.vue';
     
-  }
-}
-
+    const types = {
+        select: 'SelectVue'
+    }
+    export default {
+        name: 'formElement',
+        props: {
+            data: {
+                default: {}
+            }
+        },
+        data() {
+            return {
+            }
+        },
+        computed: {
+            type: function(){
+                return types[this.data.type];
+            }
+        },
+        methods: {
+            updateValue: function(value){
+                console.log(value)
+                this.$emit('updateValue', value)
+            }
+        },
+        components: {
+            SelectVue,
+        }
+    }
 </script>
 
 <style scoped>
-
 </style>

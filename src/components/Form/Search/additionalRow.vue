@@ -1,7 +1,7 @@
 <template>
    <div class="main-search__row">
        <div v-for="elem in data" class="main-search__elem-wrap">
-            <formElement :data="elem"></formElement>
+            <formElement :data="elem" v-on:updateValue="updateValue"></formElement>
        </div>
     </div>
 </template>
@@ -24,7 +24,9 @@ export default {
         
     },
   methods: {
-    
+    updateValue: function(value){
+        this.$emit('updateValue', value)
+    }
   },
     components: {
         formElement
