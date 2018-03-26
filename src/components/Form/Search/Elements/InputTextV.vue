@@ -1,26 +1,28 @@
 <template>
-        <select :name="data.name" class="main-search__select" v-on:change="updateValue($event.target.value)">
-            <option class="main-search__option" v-for="option in data.data" :value="option.value" :key="option.value">{{option.name}}</option>
-        </select>
+        
+        <input :name="data.name" class="main-search__input" v-on:change="updateValue($event.target.value)" :value="value" :placeholder="data.placeholder"/>
 </template>
 
 <script>
     export default {
-        name: 'SelectVue',
+        name: 'InputTextV',
         props: {
             data: {
                 default: {}
             }
         },
         data() {
-            return {}
+            return {
+                value: this.data.value || ''
+            }
         },
         computed: {
 
         },
         methods: {
             updateValue: function(value){
-                console.log(value)
+                console.log(value);
+                this.value = value;
                 this.$emit('updateValue', {value, name: this.data.name})
             }
         }

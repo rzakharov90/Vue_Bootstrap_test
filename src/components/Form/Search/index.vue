@@ -3,14 +3,11 @@
         <div class="main-search__row">
             <div class="main-search__elem-wrap">
                 <select name="category" class="main-search__select" v-model="category">
-                    <option class="main-search__option">Любая категория</option>
-                    <option class="main-search__option" value="wood">Автомобили</option>
-                    <option class="main-search__option">Бетон</option>
-                    <option class="main-search__option">Песок</option>
+                    <option class="main-search__option" v-for="elem in mainRowData.category.data" :value="elem.value">{{elem.name}}</option>
                 </select>
             </div>
             <div class="main-search__elem-wrap">
-                <input type="text" name="term" placeholder="Поиск"  class="main-search__input"  v-model="term"/>
+                <input type="text" name="term" :placeholder="mainRowData.term.placeholder"  class="main-search__input"  v-model="term"/>
             </div>
             <div class="main-search__elem-wrap main-search__elem-wrap_submit">
                 <button type="submit" class="main-search__submit">Найти</button>
@@ -26,8 +23,36 @@
 <script>
     import additionalRow from './additionalRow.vue';
 
-    var Data = {
-        wood: {
+    const Data = {
+        category: {
+            value: 'auto',
+            data: [
+                {
+                    value: '',
+                    name: 'Любая категория'
+                },
+                {
+                    value: 'auto',
+                    name: 'Автомобили'
+                },
+                {
+                    value: 'beton',
+                    name: 'Бетон'
+                },
+                {
+                    value: 'pesok',
+                    name: 'Песок'
+                },
+            ]
+        },
+        term: {
+            placeholder: 'Поиск',
+            value: ''
+        }
+    }
+    
+    const AddData = {
+        auto: {
             brand: {
                 type: 'select',
                 name: 'brand',
@@ -40,6 +65,9 @@
                 }, {
                     value: 'bmw',
                     name: 'bmw'
+                },{
+                    value: 'opel',
+                    name: 'opel'
                 }, ]
             },
             model: {
@@ -82,6 +110,12 @@
                         name: 'bmondeo'
                     }]
                 }
+            },
+            price_from: {
+                type: 'input',
+                name: 'price_from',
+                placeholder: 'Цена от',
+                value: 10000
             }
         }
     }
@@ -92,64 +126,17 @@
         props: {},
         data() {
             return {
-                term: '',
-                category: '',
+                term: Data.term.value,
+                category: Data.category.value,
                 brand: 'vaz',
-                model: '',
-//                additionalRowData: {
-//                    wood: {
-//                        brand: {
-//                            type: 'select',
-//                            name: 'brand',
-//                            data: [{
-//                                value: 'vaz',
-//                                name: 'vaz'
-//                            }, {
-//                                value: 'ford',
-//                                name: 'ford'
-//                            }, {
-//                                value: 'bmw',
-//                                name: 'bmw'
-//                            }, ]
-//                        },
-//                        model: {
-//                            type: 'select',
-//                            parent: 'brand',
-//                            name: 'model',
-//                            data: {
-//                                vaz: [{
-//                                    value: 10,
-//                                    label: 10
-//                                }, {
-//                                    value: 12,
-//                                    label: 12
-//                                }, {
-//                                    value: 13,
-//                                    label: 13
-//                                }, {
-//                                    value: 14,
-//                                    label: 14
-//                                }],
-//                                ford: [{
-//                                    value: 'focus',
-//                                    label: 'focus'
-//                                }, {
-//                                    value: 'transit',
-//                                    label: 'transit'
-//                                }, {
-//                                    value: 'mondeo',
-//                                    label: 'mondeo'
-//                                }]
-//                            }
-//                        }
-//                    }
-//                }
+                model: '10',
+                price_from: '10000',
+                mainRowData: Data,
             }
         },
         methods: {
             onValueChange: function(data) {
-                console.log(data)
-                this.value[data.name] = data
+                this.value[data.name] = data;
             },
             updateAdditionalRowValue: function({value, name}){
                 this[name] = value;
@@ -169,21 +156,23 @@
                 return valid
             },
             additionalRowData: function(){
-                if (!Data[this.category]) {
+                if (!AddData[this.category]) {
                     return false;
                 }
                 let finData = {},
-                    data = Data[this.category];
-                
+                    data = AddData[this.category];
                 for (let name in data){
                     let d = data[name];
                     
                     finData[name] = {...d};
+                    finData[name].value = this[name]; // Возможно бред - нужен, чтобы пробрасывать актуальное value в элементы форм - Косяк - вызывает лишний раз additionalRowData - Или не лишний?
+                    
                     if (d.parent) {
                         let parent = d.parent;
                         let parentValue = this[parent];
                         finData[name].data = d.data[parentValue];
-                    } 
+                       // this[name] = d.data[parentValue][0].value
+                    }
                 }
                 return finData;
                 
@@ -202,7 +191,9 @@
         align-items: stretch;
         border: 2px solid #ccc;
     }
-
+    .main-search__row_flex-wrap {
+        flex-wrap: wrap;
+    }
     .main-search__elem-wrap {
         flex-grow: 1;
         border: 1px solid #ccc;

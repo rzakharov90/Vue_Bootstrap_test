@@ -1,6 +1,6 @@
 <template>
-   <div class="main-search__row">
-       <div v-for="elem in data" class="main-search__elem-wrap">
+   <div class="main-search__row main-search__row_flex-wrap">
+       <div v-for="elem in data" class="main-search__elem-wrap" :key="elem.name">
             <formElement :data="elem" v-on:updateValue="updateValue"></formElement>
        </div>
     </div>

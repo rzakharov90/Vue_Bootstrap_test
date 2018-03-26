@@ -3,10 +3,12 @@
 </template>
 
 <script>
-    import SelectVue from './Elements/SelectVue.vue';
+    import SelectVue from './Elements/SelectV.vue';
+    import InputTextV from './Elements/InputTextV.vue';
     
     const types = {
-        select: 'SelectVue'
+        select: 'SelectVue',
+        input: 'InputTextV'
     }
     export default {
         name: 'formElement',
@@ -31,7 +33,7 @@
             }
         },
         components: {
-            SelectVue,
+            SelectVue,InputTextV
         }
     }
 </script>
