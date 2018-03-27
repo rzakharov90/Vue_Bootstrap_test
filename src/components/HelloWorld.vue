@@ -146,6 +146,109 @@ export default {
     Form, Search
   }
 }
+    
+    
+    const AddData = {
+        auto: {
+            brand: {
+                type: 'select',
+                name: 'brand',
+                subs: {
+                    model: {
+                        type: 'select',
+                        name: 'model',
+                        placeholder: 'Выберите марку'
+                    }  
+                },
+                data: {
+                    vaz: {
+                        value: 'vaz',
+                        name: 'vaz',
+                        subs: {
+                            model: {
+                                data: {
+                                    10: {
+                                        value: 10,
+                                        name: '10'
+                                    }, 
+                                    12: {
+                                        value: 12,
+                                        name: '12'
+                                    },
+                                    13: {
+                                        value: 13,
+                                        name: '13'
+                                    }, 
+                                    14: {
+                                        value: 14,
+                                        name: '14'
+                                    }
+                                }
+                            }
+                        }
+                    }, 
+                    ford: {
+                        value: 'ford',
+                        name: 'ford',
+                        subs: {
+                            model: {
+                                data: {
+                                    focus: {
+                                        value: 'focus',
+                                        name: 'focus'
+                                    },
+                                    transit: {
+                                        value: 'transit',
+                                        name: 'transit'
+                                    },
+                                    mondeo: {
+                                        value: 'mondeo',
+                                        name: 'mondeo'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    bmw: {
+                        value: 'bmw',
+                        name: 'bmw',
+                        subs: {
+                            model: {
+                                data: {
+                                    bfocus: {
+                                        value: 'bfocus',
+                                        name: 'bfocus'
+                                    }, 
+                                    btransit: {
+                                        value: 'btransit',
+                                        name: 'btransit'
+                                    },
+                                    bmondeo: {
+                                        value: 'bmondeo',
+                                        name: 'bmondeo'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    opel: {
+                        value: 'opel',
+                        name: 'opel',
+                        subs: {}
+                    }, 
+            }
+            },
+            price_from: {
+                type: 'input',
+                name: 'price_from',
+                placeholder: 'Цена от',
+                value: 10000
+            }
+        }
+    }
+    
+    
+    
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

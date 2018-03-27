@@ -56,60 +56,90 @@
             brand: {
                 type: 'select',
                 name: 'brand',
-                data: [{
-                    value: 'vaz',
-                    name: 'vaz'
-                }, {
-                    value: 'ford',
-                    name: 'ford'
-                }, {
-                    value: 'bmw',
-                    name: 'bmw'
-                },{
-                    value: 'opel',
-                    name: 'opel'
-                }, ]
-            },
-            model: {
-                type: 'select',
-                parent: 'brand',
-                name: 'model',
-                placeholder: 'Выберите марку',
+                subs: {
+                    model: {
+                        type: 'select',
+                        name: 'model',
+                        placeholder: 'Выберите марку'
+                    }  
+                },
                 data: {
-                    vaz: [{
-                        value: 10,
-                        name: '10'
-                    }, {
-                        value: 12,
-                        name: '12'
-                    }, {
-                        value: 13,
-                        name: '13'
-                    }, {
-                        value: 14,
-                        name: '14'
-                    }],
-                    ford: [{
-                        value: 'focus',
-                        name: 'focus'
-                    }, {
-                        value: 'transit',
-                        name: 'transit'
-                    }, {
-                        value: 'mondeo',
-                        name: 'mondeo'
-                    }],
-                    bmw: [{
-                        value: 'bfocus',
-                        name: 'bfocus'
-                    }, {
-                        value: 'btransit',
-                        name: 'btransit'
-                    }, {
-                        value: 'bmondeo',
-                        name: 'bmondeo'
-                    }]
-                }
+                    vaz: {
+                        value: 'vaz',
+                        name: 'vaz',
+                        subs: {
+                            model: {
+                                data: {
+                                    10: {
+                                        value: 10,
+                                        name: '10'
+                                    }, 
+                                    12: {
+                                        value: 12,
+                                        name: '12'
+                                    },
+                                    13: {
+                                        value: 13,
+                                        name: '13'
+                                    }, 
+                                    14: {
+                                        value: 14,
+                                        name: '14'
+                                    }
+                                }
+                            }
+                        }
+                    }, 
+                    ford: {
+                        value: 'ford',
+                        name: 'ford',
+                        subs: {
+                            model: {
+                                data: {
+                                    focus: {
+                                        value: 'focus',
+                                        name: 'focus'
+                                    },
+                                    transit: {
+                                        value: 'transit',
+                                        name: 'transit'
+                                    },
+                                    mondeo: {
+                                        value: 'mondeo',
+                                        name: 'mondeo'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    bmw: {
+                        value: 'bmw',
+                        name: 'bmw',
+                        subs: {
+                            model: {
+                                data: {
+                                    bfocus: {
+                                        value: 'bfocus',
+                                        name: 'bfocus'
+                                    }, 
+                                    btransit: {
+                                        value: 'btransit',
+                                        name: 'btransit'
+                                    },
+                                    bmondeo: {
+                                        value: 'bmondeo',
+                                        name: 'bmondeo'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    opel: {
+                        value: 'opel',
+                        name: 'opel',
+                        subs: {}
+                    }, 
+            }
             },
             price_from: {
                 type: 'input',
@@ -160,22 +190,34 @@
                     return false;
                 }
                 let finData = {},
-                    data = AddData[this.category];
-                for (let name in data){
-                    let d = data[name];
+                    data = Object.assign({},AddData[this.category]);
                     
-                    finData[name] = {...d};
-                    finData[name].value = this[name]; // Возможно бред - нужен, чтобы пробрасывать актуальное value в элементы форм - Косяк - вызывает лишний раз additionalRowData - Или не лишний?
-                    
-                    if (d.parent) {
-                        let parent = d.parent;
-                        let parentValue = this[parent];
-                        finData[name].data = d.data[parentValue];
-                       // this[name] = d.data[parentValue][0].value
+                
+                
+                
+                const setFinData = (data) => {
+
+                    for (let name in data){
+                        let d = data[name]; // короткий доступ к обрабатываемому объекту-свойству
+                        
+                        finData[name] = d; // записываем в финальный объект данные из обрабатываемого 
+                        //finData[name].value = this[name]; // Возможно бред - нужен, чтобы пробрасывать актуальное value в элементы форм - Косяк - вызывает лишний раз additionalRowData - Или не лишний?
+
+                        // если у обрабатываемого объекта есть зависимые объекты, то запускаем рекурсию, чтобы обработать их. Но - данные для зависимого объекта хранятся и в главном. Поэтому - небольшой костыль пока
+                        if (d.subs) {
+                            let subs =  {...d.subs};
+                            for (let n in subs){
+                                let data = {}
+                                data[n] = Object.assign({}, subs[n], d.data[this[name]].subs[n]);
+                                setFinData(data);
+                            }
+                        }
                     }
                 }
-                return finData;
                 
+                setFinData(data);
+                console.error(1111,finData)
+                return finData;
             }
         },
         components: {
