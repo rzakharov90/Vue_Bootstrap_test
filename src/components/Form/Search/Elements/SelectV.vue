@@ -1,7 +1,7 @@
 <template>
         <select :name="data.name" class="main-search__select" v-on:change="updateValue($event.target.value)">
             <template v-if="data.data">
-                <option class="main-search__option"  v-for="option in data.data" :value="option.value" :key="option.value" :selected="option.value === data.value">{{option.name}}</option>
+                <option class="main-search__option"  v-for="option in data.data" :value="option.value" :key="option.value" :selected="option.value == data.value">{{option.name}}</option>
             </template>
             <template v-else-if="data.placeholder">
                 <option class="main-search__option"  value="">{{data.placeholder}}</option>

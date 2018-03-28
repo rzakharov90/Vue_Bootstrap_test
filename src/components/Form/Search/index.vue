@@ -56,11 +56,26 @@
             brand: {
                 type: 'select',
                 name: 'brand',
+                value: 'ford',
                 subs: {
                     model: {
                         type: 'select',
                         name: 'model',
-                        placeholder: 'Выберите марку'
+                        placeholder: 'Выберите марку',
+                        subs: {
+                            test: {
+                                type: 'select',
+                                name: 'test',
+                                placeholder: 'Тест',
+                                 subs: {
+                                    test2: {
+                                        type: 'select',
+                                        name: 'test2',
+                                        placeholder: 'Тест'
+                                    }
+                                }
+                            }
+                        }
                     }  
                 },
                 data: {
@@ -72,7 +87,43 @@
                                 data: {
                                     10: {
                                         value: 10,
-                                        name: '10'
+                                        name: '10',
+                                        subs: {
+                                            test: {
+                                                data: {
+                                                    t: {
+                                                        value: 't',
+                                                        name: 't',
+                                                        subs: {
+                                                            test2: {
+                                                                data: {
+                                                                    t: {
+                                                                        value: 'tttt',
+                                                                        name: 'tttt'
+                                                                    },
+                                                                    b: {
+                                                                        value: 'bbbb',
+                                                                        name: 'bbbb'
+                                                                    },
+                                                                    n: {
+                                                                        value: 'nnnn',
+                                                                        name: 'nnnn'
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    b: {
+                                                        value: 'b',
+                                                        name: 'b'
+                                                    },
+                                                    n: {
+                                                        value: 'n',
+                                                        name: 'n'
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }, 
                                     12: {
                                         value: 12,
@@ -93,6 +144,7 @@
                     ford: {
                         value: 'ford',
                         name: 'ford',
+                        value: 'focus',
                         subs: {
                             model: {
                                 data: {
@@ -137,7 +189,6 @@
                     opel: {
                         value: 'opel',
                         name: 'opel',
-                        subs: {}
                     }, 
             }
             },
@@ -161,6 +212,9 @@
                 brand: 'vaz',
                 model: '10',
                 price_from: '10000',
+                test: 't',
+                test2: '',
+                data: {},
                 mainRowData: Data,
             }
         },
@@ -169,8 +223,31 @@
                 this.value[data.name] = data;
             },
             updateAdditionalRowValue: function({value, name}){
-                this[name] = value;
+                this.data[name] = value;
+            },
+            setDataTree: function(){
+                const mainData = Object.assign({},this.mainRowData),
+                      addData = Object.assign({},AddData);
+                let finData = {};
+                for (let name in mainData) {
+                    finData[name] = mainData[name].value;
+                }
+                
+                const setData = ({finData, addData}) => {
+                    for (let name in addData) {
+                        const val = addData[name].value;
+                        finData[name] = val;
+                        if (addData[name].subs && addData[name].subs[val]) {
+                            setData({finData, addData: addData[name].subs[val]});
+                        }
+                    }
+                }
+                setData({finData, addData: addData[this.category]});
+                console.error(43434,finData)
             }
+        },
+        beforeMount: function(){
+            this.setDataTree();
         },
         computed: {
             additionalRow: function() {
@@ -189,7 +266,7 @@
                 if (!AddData[this.category]) {
                     return false;
                 }
-                let finData = {},
+                let addData = {},
                     data = Object.assign({},AddData[this.category]);
                     
                 
@@ -200,24 +277,36 @@
                     for (let name in data){
                         let d = data[name]; // короткий доступ к обрабатываемому объекту-свойству
                         
-                        finData[name] = d; // записываем в финальный объект данные из обрабатываемого 
-                        //finData[name].value = this[name]; // Возможно бред - нужен, чтобы пробрасывать актуальное value в элементы форм - Косяк - вызывает лишний раз additionalRowData - Или не лишний?
+                        addData[name] = d; // записываем в финальный объект данные из обрабатываемого 
+                        addData[name].value = this.data[name]; // Возможно бред - нужен, чтобы пробрасывать актуальное value в элементы форм - Косяк - вызывает лишний раз additionalRowData - Или не лишний?
 
                         // если у обрабатываемого объекта есть зависимые объекты, то запускаем рекурсию, чтобы обработать их. Но - данные для зависимого объекта хранятся и в главном. Поэтому - небольшой костыль пока
+                        
                         if (d.subs) {
                             let subs =  {...d.subs};
                             for (let n in subs){
-                                let data = {}
-                                data[n] = Object.assign({}, subs[n], d.data[this[name]].subs[n]);
-                                setFinData(data);
+                                let data = {},
+                                    obj1 = subs[n] || {};
+                                if ( typeof d.data[this[name]] != 'undefined' &&  typeof d.data[this[name]].subs != 'undefined') {
+                                    console.error(d.data[this[name]])
+                                    console.error(d.data[this[name]].subs)
+                                    console.error(d.data[this[name]].subs[n])
+                                    let obj2 = d.data[this[name]].subs[n];
+                                
+                                    data[n] = Object.assign({}, obj1, obj2);
+                                    setFinData(data);
+                                    
+                                }
+                                    
                             }
                         }
+                        
                     }
                 }
                 
                 setFinData(data);
-                console.error(1111,finData)
-                return finData;
+                console.error(1111,addData)
+                return addData;
             }
         },
         components: {
