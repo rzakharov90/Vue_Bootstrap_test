@@ -56,147 +56,70 @@
             brand: {
                 type: 'select',
                 name: 'brand',
+                childs: ['model'],
                 value: 'ford',
-                subs: {
-                    model: {
-                        type: 'select',
-                        name: 'model',
-                        placeholder: 'Выберите марку',
-                        subs: {
-                            test: {
-                                type: 'select',
-                                name: 'test',
-                                placeholder: 'Тест',
-                                 subs: {
-                                    test2: {
-                                        type: 'select',
-                                        name: 'test2',
-                                        placeholder: 'Тест'
-                                    }
-                                }
-                            }
-                        }
-                    }  
-                },
+                placeholder: 'Выберите бренд',
+                data: [{
+                    value: 'vaz',
+                    name: 'vaz'
+                }, {
+                    value: 'ford',
+                    name: 'ford'
+                }, {
+                    value: 'bmw',
+                    name: 'bmw'
+                },{
+                    value: 'opel',
+                    name: 'opel'
+                }, ]
+            },
+            model: {
+                type: 'select',
+                parent: 'brand',
+                name: 'model',
+                placeholder: 'Выберите марку',
+                value: '',
                 data: {
-                    vaz: {
-                        value: 'vaz',
-                        name: 'vaz',
-                        subs: {
-                            model: {
-                                data: {
-                                    10: {
-                                        value: 10,
-                                        name: '10',
-                                        subs: {
-                                            test: {
-                                                data: {
-                                                    t: {
-                                                        value: 't',
-                                                        name: 't',
-                                                        subs: {
-                                                            test2: {
-                                                                data: {
-                                                                    t: {
-                                                                        value: 'tttt',
-                                                                        name: 'tttt'
-                                                                    },
-                                                                    b: {
-                                                                        value: 'bbbb',
-                                                                        name: 'bbbb'
-                                                                    },
-                                                                    n: {
-                                                                        value: 'nnnn',
-                                                                        name: 'nnnn'
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    b: {
-                                                        value: 'b',
-                                                        name: 'b'
-                                                    },
-                                                    n: {
-                                                        value: 'n',
-                                                        name: 'n'
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }, 
-                                    12: {
-                                        value: 12,
-                                        name: '12'
-                                    },
-                                    13: {
-                                        value: 13,
-                                        name: '13'
-                                    }, 
-                                    14: {
-                                        value: 14,
-                                        name: '14'
-                                    }
-                                }
-                            }
-                        }
-                    }, 
-                    ford: {
-                        value: 'ford',
-                        name: 'ford',
+                    vaz: [{
+                        value: 10,
+                        name: '10'
+                    }, {
+                        value: 12,
+                        name: '12'
+                    }, {
+                        value: 13,
+                        name: '13'
+                    }, {
+                        value: 14,
+                        name: '14'
+                    }],
+                    ford: [{
                         value: 'focus',
-                        subs: {
-                            model: {
-                                data: {
-                                    focus: {
-                                        value: 'focus',
-                                        name: 'focus'
-                                    },
-                                    transit: {
-                                        value: 'transit',
-                                        name: 'transit'
-                                    },
-                                    mondeo: {
-                                        value: 'mondeo',
-                                        name: 'mondeo'
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    bmw: {
-                        value: 'bmw',
-                        name: 'bmw',
-                        subs: {
-                            model: {
-                                data: {
-                                    bfocus: {
-                                        value: 'bfocus',
-                                        name: 'bfocus'
-                                    }, 
-                                    btransit: {
-                                        value: 'btransit',
-                                        name: 'btransit'
-                                    },
-                                    bmondeo: {
-                                        value: 'bmondeo',
-                                        name: 'bmondeo'
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    opel: {
-                        value: 'opel',
-                        name: 'opel',
-                    }, 
-            }
+                        name: 'focus'
+                    }, {
+                        value: 'transit',
+                        name: 'transit'
+                    }, {
+                        value: 'mondeo',
+                        name: 'mondeo'
+                    }],
+                    bmw: [{
+                        value: 'bfocus',
+                        name: 'bfocus'
+                    }, {
+                        value: 'btransit',
+                        name: 'btransit'
+                    }, {
+                        value: 'bmondeo',
+                        name: 'bmondeo'
+                    }]
+                }
             },
             price_from: {
                 type: 'input',
                 name: 'price_from',
                 placeholder: 'Цена от',
-                value: 10000
+                value: 123123
             }
         }
     }
@@ -209,45 +132,43 @@
             return {
                 term: Data.term.value,
                 category: Data.category.value,
-                brand: 'vaz',
-                model: '10',
-                price_from: '10000',
-                test: 't',
-                test2: '',
-                data: {},
                 mainRowData: Data,
+                AddRowData: {
+                }
             }
         },
         methods: {
-            onValueChange: function(data) {
-                this.value[data.name] = data;
-            },
             updateAdditionalRowValue: function({value, name}){
-                this.data[name] = value;
-            },
-            setDataTree: function(){
-                const mainData = Object.assign({},this.mainRowData),
-                      addData = Object.assign({},AddData);
-                let finData = {};
-                for (let name in mainData) {
-                    finData[name] = mainData[name].value;
-                }
-                
-                const setData = ({finData, addData}) => {
-                    for (let name in addData) {
-                        const val = addData[name].value;
-                        finData[name] = val;
-                        if (addData[name].subs && addData[name].subs[val]) {
-                            setData({finData, addData: addData[name].subs[val]});
+                this.AddRowData[name] = value;
+                // ручное обновление значений зависимых элементов форм
+                if(AddData[this.category][name].childs && AddData[this.category][name].childs.length) {
+                    AddData[this.category][name].childs.forEach(el => {
+                        if (this.AddRowData[el]) {
+                            this.AddRowData[this.category][el] = '';
                         }
+                    })
+                }
+            },
+            getAdditionalData: function(AddData){
+
+                const addData = Object.assign({}, AddData);
+                let data = {};
+                for (let name in addData) {
+                    let property = addData[name];
+                    data[name] = Object.assign({}, property);
+                    data[name].value = this.AddRowData[name];
+                    if (property.parent) {
+                        let parentValue = this.AddRowData[property.parent];
+                        data[name].data = property.data[parentValue];
                     }
                 }
-                setData({finData, addData: addData[this.category]});
-                console.error(43434,finData)
+                return data;
+            },
+            getInitialAdditionalData: function(AddData) {
+                for (let name in AddData) {
+                    this.AddRowData[name] = AddData[name].value || '';
+                }
             }
-        },
-        beforeMount: function(){
-            this.setDataTree();
         },
         computed: {
             additionalRow: function() {
@@ -266,48 +187,13 @@
                 if (!AddData[this.category]) {
                     return false;
                 }
-                let addData = {},
-                    data = Object.assign({},AddData[this.category]);
-                    
-                
-                
-                
-                const setFinData = (data) => {
+                return this.getAdditionalData(AddData[this.category]);
 
-                    for (let name in data){
-                        let d = data[name]; // короткий доступ к обрабатываемому объекту-свойству
-                        
-                        addData[name] = d; // записываем в финальный объект данные из обрабатываемого 
-                        addData[name].value = this.data[name]; // Возможно бред - нужен, чтобы пробрасывать актуальное value в элементы форм - Косяк - вызывает лишний раз additionalRowData - Или не лишний?
-
-                        // если у обрабатываемого объекта есть зависимые объекты, то запускаем рекурсию, чтобы обработать их. Но - данные для зависимого объекта хранятся и в главном. Поэтому - небольшой костыль пока
-                        
-                        if (d.subs) {
-                            let subs =  {...d.subs};
-                            for (let n in subs){
-                                let data = {},
-                                    obj1 = subs[n] || {};
-                                if ( typeof d.data[this[name]] != 'undefined' &&  typeof d.data[this[name]].subs != 'undefined') {
-                                    console.error(d.data[this[name]])
-                                    console.error(d.data[this[name]].subs)
-                                    console.error(d.data[this[name]].subs[n])
-                                    let obj2 = d.data[this[name]].subs[n];
-                                
-                                    data[n] = Object.assign({}, obj1, obj2);
-                                    setFinData(data);
-                                    
-                                }
-                                    
-                            }
-                        }
-                        
-                    }
-                }
-                
-                setFinData(data);
-                console.error(1111,addData)
-                return addData;
             }
+            
+        },
+        created: function(){
+            this.getInitialAdditionalData(AddData[this.category]);
         },
         components: {
             additionalRow
