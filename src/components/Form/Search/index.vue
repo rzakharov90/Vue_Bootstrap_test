@@ -121,6 +121,82 @@
                 placeholder: 'Цена от',
                 value: 123123
             }
+        },
+        beton: {
+            brand: {
+                type: 'select',
+                name: 'brand',
+                childs: ['model'],
+                value: 'bmw',
+                placeholder: 'Выберите бренд',
+                data: [{
+                    value: 'vaz',
+                    name: 'betonvaz'
+                }, {
+                    value: 'ford',
+                    name: 'betonford'
+                }, {
+                    value: 'bmw',
+                    name: 'betonbmw'
+                },{
+                    value: 'opel',
+                    name: 'betonopel'
+                }, ]
+            },
+            model: {
+                type: 'select',
+                parent: 'brand',
+                name: 'model',
+                placeholder: 'Выберите марку',
+                value: '',
+                data: {
+                    vaz: [{
+                        value: 10,
+                        name: 'beton10'
+                    }, {
+                        value: 12,
+                        name: 'beton12'
+                    }, {
+                        value: 13,
+                        name: 'beton13'
+                    }, {
+                        value: 14,
+                        name: 'beton14'
+                    }],
+                    ford: [{
+                        value: 'focus',
+                        name: 'betonfocus'
+                    }, {
+                        value: 'transit',
+                        name: 'betontransit'
+                    }, {
+                        value: 'mondeo',
+                        name: 'betonmondeo'
+                    }],
+                    bmw: [{
+                        value: 'bfocus',
+                        name: 'betonbfocus'
+                    }, {
+                        value: 'btransit',
+                        name: 'betonbtransit'
+                    }, {
+                        value: 'bmondeo',
+                        name: 'betonbmondeo'
+                    }]
+                }
+            },
+            price_from: {
+                type: 'input',
+                name: 'price_from',
+                placeholder: 'betonЦена от',
+                value: 123123
+            },
+            price_to: {
+                type: 'input',
+                name: 'price_to',
+                placeholder: 'betonЦена до',
+                value: 123123
+            }
         }
     }
 
@@ -134,46 +210,59 @@
                 category: Data.category.value,
                 mainRowData: Data,
                 AddRowData: {
+                    auto: {
+                        brand: null,
+                        model: null,
+                        price_from: null
+                    },
+                    beton: {
+                        brand: null,
+                        model: null,
+                        price_from: null,
+                        price_to: null,
+                    }
                 }
             }
         },
         methods: {
             updateAdditionalRowValue: function({value, name}){
-                this.AddRowData[name] = value;
+                console.log('updateAdditionalRowValue', {value, name})
+                this.AddRowData[this.category][name] = value;
                 // ручное обновление значений зависимых элементов форм
                 if(AddData[this.category][name].childs && AddData[this.category][name].childs.length) {
                     AddData[this.category][name].childs.forEach(el => {
-                        if (this.AddRowData[el]) {
+                        if (this.AddRowData[this.category][el]) {
                             this.AddRowData[this.category][el] = '';
                         }
                     })
                 }
             },
             getAdditionalData: function(AddData){
-
+                console.log('getAdditionalData', AddData)
                 const addData = Object.assign({}, AddData);
                 let data = {};
                 for (let name in addData) {
                     let property = addData[name];
                     data[name] = Object.assign({}, property);
-                    data[name].value = this.AddRowData[name];
+                    data[name].value = this.AddRowData[this.category][name];
                     if (property.parent) {
-                        let parentValue = this.AddRowData[property.parent];
+                        let parentValue = this.AddRowData[this.category][property.parent];
                         data[name].data = property.data[parentValue];
                     }
                 }
                 return data;
             },
             getInitialAdditionalData: function(AddData) {
-                for (let name in AddData) {
-                    this.AddRowData[name] = AddData[name].value || '';
+                console.log('getInitialAdditionalData', AddData);
+                for (let name in this.AddRowData) {
+                    for (let name2 in this.AddRowData[name]) {
+                        this.AddRowData[name][name2] = AddData[name][name2].value || '';
+                    }
                 }
-            }
+            },
+            
         },
         computed: {
-            additionalRow: function() {
-                return this.additionalRowData[this.category];
-            },
             isValid: function() {
                 let valid = true
                 for (let item in this.value) {
@@ -184,16 +273,24 @@
                 return valid
             },
             additionalRowData: function(){
+                console.log('additionalRowData')
                 if (!AddData[this.category]) {
                     return false;
                 }
                 return this.getAdditionalData(AddData[this.category]);
 
+            },
+            finallyData: function(){
+                let data = Object.assign({}, {category: this.category, term: this.term});
+                if (this.AddRowData[this.category]) {
+                   data = Object.assign(data, this.AddRowData[this.category]);
+                }
+                return data;
             }
             
         },
         created: function(){
-            this.getInitialAdditionalData(AddData[this.category]);
+            this.getInitialAdditionalData(AddData);
         },
         components: {
             additionalRow
