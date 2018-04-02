@@ -28,7 +28,6 @@
         },
         methods: {
             updateValue: function(value){
-                console.log(value)
                 this.$emit('updateValue', value)
             }
         },

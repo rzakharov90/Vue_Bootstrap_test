@@ -2,19 +2,19 @@
     <form v-bind:class="{ error: !isValid }" class="main-search">
         <div class="main-search__row">
             <div class="main-search__elem-wrap">
-                <select name="category" class="main-search__select" v-model="category">
-                    <option class="main-search__option" v-for="elem in mainRowData.category.data" :value="elem.value">{{elem.name}}</option>
+                <select name="category" class="main-search__select" :value="mainValues.category" v-on:change="mainValues.category = $event.target.value">
+                    <option class="main-search__option" v-for="elem in MainData.category.data" :value="elem.value">{{elem.name}}</option>
                 </select>
             </div>
             <div class="main-search__elem-wrap">
-                <input type="text" name="term" :placeholder="mainRowData.term.placeholder"  class="main-search__input"  v-model="term"/>
+                <input type="text" name="term" :placeholder="MainData.term.placeholder"  class="main-search__input" :value="mainValues.term" v-on:change="mainValues.term = $event.target.value"/>
             </div>
             <div class="main-search__elem-wrap main-search__elem-wrap_submit">
                 <button type="submit" class="main-search__submit">Найти</button>
             </div>
         </div>
         <div v-if="additionalRowData">
-            <additionalRow :data="additionalRowData" v-on:updateValue="updateAdditionalRowValue"></additionalRow>
+            <additionalRow :data="additionalRowData" v-on:updateValue="updateAdditionalValue"></additionalRow>
         </div>
     </form>
 </template>
@@ -23,193 +23,19 @@
 <script>
     import additionalRow from './additionalRow.vue';
 
-    const Data = {
-        category: {
-            value: 'auto',
-            data: [
-                {
-                    value: '',
-                    name: 'Любая категория'
-                },
-                {
-                    value: 'auto',
-                    name: 'Автомобили'
-                },
-                {
-                    value: 'beton',
-                    name: 'Бетон'
-                },
-                {
-                    value: 'pesok',
-                    name: 'Песок'
-                },
-            ]
-        },
-        term: {
-            placeholder: 'Поиск',
-            value: ''
-        }
-    }
-    
-    const AddData = {
-        auto: {
-            brand: {
-                type: 'select',
-                name: 'brand',
-                childs: ['model'],
-                value: 'ford',
-                placeholder: 'Выберите бренд',
-                data: [{
-                    value: 'vaz',
-                    name: 'vaz'
-                }, {
-                    value: 'ford',
-                    name: 'ford'
-                }, {
-                    value: 'bmw',
-                    name: 'bmw'
-                },{
-                    value: 'opel',
-                    name: 'opel'
-                }, ]
-            },
-            model: {
-                type: 'select',
-                parent: 'brand',
-                name: 'model',
-                placeholder: 'Выберите марку',
-                value: '',
-                data: {
-                    vaz: [{
-                        value: 10,
-                        name: '10'
-                    }, {
-                        value: 12,
-                        name: '12'
-                    }, {
-                        value: 13,
-                        name: '13'
-                    }, {
-                        value: 14,
-                        name: '14'
-                    }],
-                    ford: [{
-                        value: 'focus',
-                        name: 'focus'
-                    }, {
-                        value: 'transit',
-                        name: 'transit'
-                    }, {
-                        value: 'mondeo',
-                        name: 'mondeo'
-                    }],
-                    bmw: [{
-                        value: 'bfocus',
-                        name: 'bfocus'
-                    }, {
-                        value: 'btransit',
-                        name: 'btransit'
-                    }, {
-                        value: 'bmondeo',
-                        name: 'bmondeo'
-                    }]
-                }
-            },
-            price_from: {
-                type: 'input',
-                name: 'price_from',
-                placeholder: 'Цена от',
-                value: 123123
-            }
-        },
-        beton: {
-            brand: {
-                type: 'select',
-                name: 'brand',
-                childs: ['model'],
-                value: 'bmw',
-                placeholder: 'Выберите бренд',
-                data: [{
-                    value: 'vaz',
-                    name: 'betonvaz'
-                }, {
-                    value: 'ford',
-                    name: 'betonford'
-                }, {
-                    value: 'bmw',
-                    name: 'betonbmw'
-                },{
-                    value: 'opel',
-                    name: 'betonopel'
-                }, ]
-            },
-            model: {
-                type: 'select',
-                parent: 'brand',
-                name: 'model',
-                placeholder: 'Выберите марку',
-                value: '',
-                data: {
-                    vaz: [{
-                        value: 10,
-                        name: 'beton10'
-                    }, {
-                        value: 12,
-                        name: 'beton12'
-                    }, {
-                        value: 13,
-                        name: 'beton13'
-                    }, {
-                        value: 14,
-                        name: 'beton14'
-                    }],
-                    ford: [{
-                        value: 'focus',
-                        name: 'betonfocus'
-                    }, {
-                        value: 'transit',
-                        name: 'betontransit'
-                    }, {
-                        value: 'mondeo',
-                        name: 'betonmondeo'
-                    }],
-                    bmw: [{
-                        value: 'bfocus',
-                        name: 'betonbfocus'
-                    }, {
-                        value: 'btransit',
-                        name: 'betonbtransit'
-                    }, {
-                        value: 'bmondeo',
-                        name: 'betonbmondeo'
-                    }]
-                }
-            },
-            price_from: {
-                type: 'input',
-                name: 'price_from',
-                placeholder: 'betonЦена от',
-                value: 123123
-            },
-            price_to: {
-                type: 'input',
-                name: 'price_to',
-                placeholder: 'betonЦена до',
-                value: 123123
-            }
-        }
-    }
-
-
     export default {
         name: 'Search',
-        props: {},
+        props: {
+            MainData: Object,
+            AddData: Object
+        },
         data() {
-            return {
-                term: Data.term.value,
-                category: Data.category.value,
-                mainRowData: Data,
-                AddRowData: {
+            return {  
+                mainValues: {
+                    term: this.MainData.term.value,
+                    category: this.MainData.category.value,
+                },
+                addValues: {
                     auto: {
                         brand: null,
                         model: null,
@@ -220,43 +46,52 @@
                         model: null,
                         price_from: null,
                         price_to: null,
+                        body: null
                     }
                 }
             }
         },
         methods: {
-            updateAdditionalRowValue: function({value, name}){
-                console.log('updateAdditionalRowValue', {value, name})
-                this.AddRowData[this.category][name] = value;
+            updateAdditionalValue: function({value, name}){
+                this.addValues[this.mainValues.category][name] = value;
                 // ручное обновление значений зависимых элементов форм
-                if(AddData[this.category][name].childs && AddData[this.category][name].childs.length) {
-                    AddData[this.category][name].childs.forEach(el => {
-                        if (this.AddRowData[this.category][el]) {
-                            this.AddRowData[this.category][el] = '';
+                if(this.AddData[this.mainValues.category][name].childs && this.AddData[this.mainValues.category][name].childs.length) {
+                    this.AddData[this.mainValues.category][name].childs.forEach(el => {
+                        if (this.addValues[this.mainValues.category][el]) {
+                            this.addValues[this.mainValues.category][el] = '';
                         }
                     })
                 }
             },
             getAdditionalData: function(AddData){
-                console.log('getAdditionalData', AddData)
+                // Создаём копию объекты данных дополнительных фильтров
                 const addData = Object.assign({}, AddData);
-                let data = {};
-                for (let name in addData) {
-                    let property = addData[name];
-                    data[name] = Object.assign({}, property);
-                    data[name].value = this.AddRowData[this.category][name];
-                    if (property.parent) {
-                        let parentValue = this.AddRowData[this.category][property.parent];
-                        data[name].data = property.data[parentValue];
+                let data = {}; // инициализация объекта, который мы вернём из метода
+                for (let name in addData) { // цикл по всем свойствам нашего объекта
+                    
+                    let property = addData[name]; // короткий доступ к каждому свойству
+                    
+                    if (property.parent) { // Если это фильтр, который зависит от других, то:
+                        let parentValue = this.addValues[this.mainValues.category][property.parent]; // Узнаём актуальное значение у фильтра, который является главным к нему
+                        if (property.data[parentValue] && property.data[parentValue].length) {
+                            
+                            data[name] = Object.assign({}, property); // записываем новое свойство в новый объект, используя клонирование
+                            data[name].value = this.addValues[this.mainValues.category][name]; // Записываем в это свойство актуальное значение value 
+                            data[name].data = property.data[parentValue]; // Используем это значение, чтобы забрать актуальную data - например список селектов.
+                            
+                        }
+                    } else {
+                        data[name] = Object.assign({}, property); // записываем новое свойство в новый объект, используя клонирование
+                        data[name].value = this.addValues[this.mainValues.category][name]; // Записываем в это свойство актуальное значение value 
                     }
+
                 }
                 return data;
             },
             getInitialAdditionalData: function(AddData) {
-                console.log('getInitialAdditionalData', AddData);
-                for (let name in this.AddRowData) {
-                    for (let name2 in this.AddRowData[name]) {
-                        this.AddRowData[name][name2] = AddData[name][name2].value || '';
+                for (let name in this.addValues) {
+                    for (let name2 in this.addValues[name]) {
+                        this.addValues[name][name2] = AddData[name][name2].value || '';
                     }
                 }
             },
@@ -273,24 +108,23 @@
                 return valid
             },
             additionalRowData: function(){
-                console.log('additionalRowData')
-                if (!AddData[this.category]) {
+                if (!this.AddData[this.mainValues.category]) {
                     return false;
                 }
-                return this.getAdditionalData(AddData[this.category]);
+                return this.getAdditionalData(this.AddData[this.mainValues.category]);
 
             },
             finallyData: function(){
-                let data = Object.assign({}, {category: this.category, term: this.term});
-                if (this.AddRowData[this.category]) {
-                   data = Object.assign(data, this.AddRowData[this.category]);
+                let data = Object.assign({}, this.mainValues);
+                if (this.addValues[this.mainValues.category]) {
+                   data = Object.assign(data, this.addValues[this.mainValues.category]);
                 }
                 return data;
             }
             
         },
         created: function(){
-            this.getInitialAdditionalData(AddData);
+            this.getInitialAdditionalData(this.AddData);
         },
         components: {
             additionalRow

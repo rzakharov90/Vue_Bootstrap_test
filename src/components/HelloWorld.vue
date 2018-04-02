@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Search></Search>
+        <Search :MainData="MainData" :AddData="AddData"></Search>
     </div>
 <!--  <div class="hello">
     <b-container class="cmn-gap">
@@ -133,6 +133,204 @@
 <script>
 import Form from '@/components/Form/Form.vue'
 import Search from '@/components/Form/Search'
+    
+    const MainData = {
+        category: {
+            value: 'auto',
+            data: [
+                {
+                    value: '',
+                    name: 'Любая категория'
+                },
+                {
+                    value: 'auto',
+                    name: 'Автомобили'
+                },
+                {
+                    value: 'beton',
+                    name: 'Бетон'
+                },
+                {
+                    value: 'pesok',
+                    name: 'Песок'
+                },
+            ]
+        },
+        term: {
+            placeholder: 'Поиск',
+            value: ''
+        }
+    }
+    
+    const AddData = {
+        auto: {
+            brand: {
+                type: 'select',
+                name: 'brand',
+                childs: ['model'],
+                value: 'ford',
+                placeholder: 'Выберите бренд',
+                data: [{
+                    value: 'vaz',
+                    name: 'vaz'
+                }, {
+                    value: 'ford',
+                    name: 'ford'
+                }, {
+                    value: 'bmw',
+                    name: 'bmw'
+                },{
+                    value: 'opel',
+                    name: 'opel'
+                }, ]
+            },
+            model: {
+                type: 'select',
+                parent: 'brand',
+                name: 'model',
+                placeholder: 'Выберите марку',
+                value: '',
+                data: {
+                    vaz: [{
+                        value: 10,
+                        name: '10'
+                    }, {
+                        value: 12,
+                        name: '12'
+                    }, {
+                        value: 13,
+                        name: '13'
+                    }, {
+                        value: 14,
+                        name: '14'
+                    }],
+                    ford: [{
+                        value: 'focus',
+                        name: 'focus'
+                    }, {
+                        value: 'transit',
+                        name: 'transit'
+                    }, {
+                        value: 'mondeo',
+                        name: 'mondeo'
+                    }],
+                    bmw: [{
+                        value: 'bfocus',
+                        name: 'bfocus'
+                    }, {
+                        value: 'btransit',
+                        name: 'btransit'
+                    }, {
+                        value: 'bmondeo',
+                        name: 'bmondeo'
+                    }]
+                }
+            },
+            price_from: {
+                type: 'input',
+                name: 'price_from',
+                placeholder: 'Цена от',
+                value: 123123
+            }
+        },
+        beton: {
+            brand: {
+                type: 'select',
+                name: 'brand',
+                childs: ['model'],
+                value: 'bmw',
+                placeholder: 'Выберите бренд',
+                data: [{
+                    value: 'vaz',
+                    name: 'betonvaz'
+                }, {
+                    value: 'ford',
+                    name: 'betonford'
+                }, {
+                    value: 'bmw',
+                    name: 'betonbmw'
+                },{
+                    value: 'opel',
+                    name: 'betonopel'
+                }, ]
+            },
+            model: {
+                type: 'select',
+                parent: 'brand',
+                name: 'model',
+                placeholder: 'Выберите марку',
+                value: '',
+                data: {
+                    vaz: [{
+                        value: 10,
+                        name: 'beton10'
+                    }, {
+                        value: 12,
+                        name: 'beton12'
+                    }, {
+                        value: 13,
+                        name: 'beton13'
+                    }, {
+                        value: 14,
+                        name: 'beton14'
+                    }],
+                    ford: [{
+                        value: 'focus',
+                        name: 'betonfocus'
+                    }, {
+                        value: 'transit',
+                        name: 'betontransit'
+                    }, {
+                        value: 'mondeo',
+                        name: 'betonmondeo'
+                    }],
+                    bmw: [{
+                        value: 'bfocus',
+                        name: 'betonbfocus'
+                    }, {
+                        value: 'btransit',
+                        name: 'betonbtransit'
+                    }, {
+                        value: 'bmondeo',
+                        name: 'betonbmondeo'
+                    }]
+                }
+            },
+            body: {
+                type: 'select',
+                parent: 'model',
+                name: 'body',
+                placeholder: 'Выберите модель',
+                value: '',
+                data: {
+                    focus: [{
+                        value: 'hatch',
+                        name: 'Хэтчбек'
+                    }, {
+                        value: 'sedan',
+                        name: 'Седан'
+                    }, {
+                        value: 'universal',
+                        name: 'Универсал'
+                    }],
+                }
+            },
+            price_from: {
+                type: 'input',
+                name: 'price_from',
+                placeholder: 'betonЦена от',
+                value: 123123
+            },
+            price_to: {
+                type: 'input',
+                name: 'price_to',
+                placeholder: 'betonЦена до',
+                value: 222222
+            }
+        }
+    }
+
+
 export default {
   name: 'HelloWorld',
   data () {
@@ -140,6 +338,8 @@ export default {
       msg: 'Welcome to Your Vue.js App',
         category: null,
         city: null,
+        MainData,
+        AddData
     }
   },
   components: {
@@ -147,107 +347,7 @@ export default {
   }
 }
     
-    
-    const AddData = {
-        auto: {
-            brand: {
-                type: 'select',
-                name: 'brand',
-                subs: {
-                    model: {
-                        type: 'select',
-                        name: 'model',
-                        placeholder: 'Выберите марку'
-                    }  
-                },
-                data: {
-                    vaz: {
-                        value: 'vaz',
-                        name: 'vaz',
-                        subs: {
-                            model: {
-                                data: {
-                                    10: {
-                                        value: 10,
-                                        name: '10'
-                                    }, 
-                                    12: {
-                                        value: 12,
-                                        name: '12'
-                                    },
-                                    13: {
-                                        value: 13,
-                                        name: '13'
-                                    }, 
-                                    14: {
-                                        value: 14,
-                                        name: '14'
-                                    }
-                                }
-                            }
-                        }
-                    }, 
-                    ford: {
-                        value: 'ford',
-                        name: 'ford',
-                        subs: {
-                            model: {
-                                data: {
-                                    focus: {
-                                        value: 'focus',
-                                        name: 'focus'
-                                    },
-                                    transit: {
-                                        value: 'transit',
-                                        name: 'transit'
-                                    },
-                                    mondeo: {
-                                        value: 'mondeo',
-                                        name: 'mondeo'
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    bmw: {
-                        value: 'bmw',
-                        name: 'bmw',
-                        subs: {
-                            model: {
-                                data: {
-                                    bfocus: {
-                                        value: 'bfocus',
-                                        name: 'bfocus'
-                                    }, 
-                                    btransit: {
-                                        value: 'btransit',
-                                        name: 'btransit'
-                                    },
-                                    bmondeo: {
-                                        value: 'bmondeo',
-                                        name: 'bmondeo'
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    opel: {
-                        value: 'opel',
-                        name: 'opel',
-                        subs: {}
-                    }, 
-            }
-            },
-            price_from: {
-                type: 'input',
-                name: 'price_from',
-                placeholder: 'Цена от',
-                value: 10000
-            }
-        }
-    }
-    
-    
+
     
 </script>
 
